@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type { Product } from "@shared/schema";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import type { Product } from '@shared/schema';
 
 export interface CartItem extends Product {
   quantity: number;
@@ -14,7 +14,6 @@ interface CartStore {
   updateQuantity: (productId: number, quantity: number) => void;
   toggleCart: () => void;
   clearCart: () => void;
-  total: number;
 }
 
 export const useCart = create<CartStore>()(
@@ -22,8 +21,6 @@ export const useCart = create<CartStore>()(
     (set, get) => ({
       items: [],
       isOpen: false,
-      total: 0,
-      
       addItem: (product) => {
         const currentItems = get().items;
         const existingItem = currentItems.find((item) => item.id === product.id);
@@ -39,15 +36,13 @@ export const useCart = create<CartStore>()(
         } else {
           set({ items: [...currentItems, { ...product, quantity: 1 }] });
         }
-        set({ isOpen: true }); // Open cart when item added
+        set({ isOpen: true });
       },
-
       removeItem: (productId) => {
         set({
           items: get().items.filter((item) => item.id !== productId),
         });
       },
-
       updateQuantity: (productId, quantity) => {
         if (quantity <= 0) {
           get().removeItem(productId);
@@ -59,13 +54,17 @@ export const useCart = create<CartStore>()(
           ),
         });
       },
-
       toggleCart: () => set({ isOpen: !get().isOpen }),
-      
       clearCart: () => set({ items: [] }),
     }),
     {
-      name: "rin-cart-storage",
+      name: 'rin-cart-storage',
     }
   )
 );
+
+export const selectCartTotal = (state: CartStore) =>
+  state.items.reduce((total, item) => total + Number(item.price) * item.quantity, 0);
+
+export const selectCartCount = (state: CartStore) =>
+  state.items.reduce((count, item) => count + item.quantity, 0);
