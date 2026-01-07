@@ -107,10 +107,58 @@ async function seedDatabase() {
       slug: "rin-chronograph-obsidian",
       description: "A masterpiece of engineering featuring an obsidian dial and sapphire crystal.",
       price: "1250.00",
-      images: ["https://images.unsplash.com/photo-1547996160-81dfa63595ee?q=80&w=1974&auto=format&fit=crop"],
+      images: ["/1.jpg"],
       isFeatured: true,
       specifications: { "Case": "42mm Titanium", "Movement": "Automatic", "Strap": "Alligator Leather" },
       stock: 5
+    });
+
+    await storage.createProduct({
+      categoryId: watches.id,
+      name: "Rin Heritage Silver",
+      slug: "rin-heritage-silver",
+      description: "Classic silver timepiece with a sunray dial and premium stainless steel bracelet.",
+      price: "950.00",
+      images: ["/2.jpg"],
+      isFeatured: true,
+      specifications: { "Case": "40mm Steel", "Movement": "Automatic", "Strap": "Steel Link" },
+      stock: 8
+    });
+
+    await storage.createProduct({
+      categoryId: watches.id,
+      name: "Rin Midnight Gold",
+      slug: "rin-midnight-gold",
+      description: "Elegant gold-tone watch with a deep navy dial for a sophisticated look.",
+      price: "1100.00",
+      images: ["/3.jpg"],
+      isFeatured: false,
+      specifications: { "Case": "41mm Gold PVD", "Movement": "Automatic", "Strap": "Navy Leather" },
+      stock: 10
+    });
+
+    await storage.createProduct({
+      categoryId: watches.id,
+      name: "Rin Rose Explorer",
+      slug: "rin-rose-explorer",
+      description: "A versatile watch combining rose gold accents with a rugged build.",
+      price: "1050.00",
+      images: ["/4.jpg"],
+      isFeatured: false,
+      specifications: { "Case": "42mm Rose Gold", "Movement": "Automatic", "Strap": "Rubber Hybrid" },
+      stock: 15
+    });
+
+    await storage.createProduct({
+      categoryId: watches.id,
+      name: "Rin Minimalist White",
+      slug: "rin-minimalist-white",
+      description: "Clean, architectural design with a stark white dial and mesh strap.",
+      price: "750.00",
+      images: ["/5.jpg"],
+      isFeatured: true,
+      specifications: { "Case": "38mm Steel", "Movement": "Quartz", "Strap": "Mesh Steel" },
+      stock: 25
     });
 
     await storage.createProduct({
