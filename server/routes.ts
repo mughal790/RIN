@@ -55,6 +55,11 @@ export async function registerRoutes(
     }
   });
 
+  // Re-seed for image fixes if requested
+  if (process.env.RESEED === "true") {
+    await seedDatabase();
+  }
+
   if (process.env.NODE_ENV !== "production") {
     await seedDatabase();
   }
@@ -68,7 +73,7 @@ async function seedDatabase() {
     const watches = await storage.createCategory({
       name: "Luxury Watches",
       slug: "watches",
-      imageUrl: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=2080&auto=format&fit=crop",
+      imageUrl: "/1.jpg",
       description: "Exquisite timepieces for the discerning individual."
     });
     
@@ -107,7 +112,7 @@ async function seedDatabase() {
       slug: "rin-chronograph-obsidian",
       description: "A masterpiece of engineering featuring an obsidian dial and sapphire crystal.",
       price: "1250.00",
-      images: ["/public/1.jpg"],
+      images: ["/1.jpg"],
       isFeatured: true,
       specifications: { "Case": "42mm Titanium", "Movement": "Automatic", "Strap": "Alligator Leather" },
       stock: 5
