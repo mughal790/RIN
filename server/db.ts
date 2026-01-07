@@ -18,7 +18,14 @@ export const db = drizzle(pool, { schema });
 export async function runMigrations() {
   if (process.env.NODE_ENV === "production") {
     console.log("Running migrations...");
-    await migrate(db, { migrationsFolder: path.resolve(__dirname, "../migrations") });
-    console.log("Migrations completed.");
+    try {
+      const migrationsPath = path.resolve(process.cwd(), "migrations");
+      console.log(`Looking for migrations in: ${migrationsPath}`);
+      await migrate(db, { migrationsFolder: migrationsPath });
+      console.log("Migrations completed.");
+    } catch (error) {
+      console.error("Migration failed:", error);
+      // Don't throw, let the app try to start anyway
+    }
   }
 }
