@@ -7,7 +7,7 @@ import {
   type Product,
   type InsertProduct
 } from "@shared/schema";
-import { eq, ilike } from "drizzle-orm";
+import { eq, ilike, and } from "drizzle-orm";
 
 export interface IStorage {
   getCategories(): Promise<Category[]>;
@@ -21,12 +21,22 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async getCategories(): Promise<Category[]> {
-    return await db.select().from(categories);
+    try {
+      return await db.select().from(categories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      return [];
+    }
   }
 
   async getCategoryBySlug(slug: string): Promise<Category | undefined> {
-    const [category] = await db.select().from(categories).where(eq(categories.slug, slug));
-    return category;
+    try {
+      const [category] = await db.select().from(categories).where(eq(categories.slug, slug));
+      return category;
+    } catch (error) {
+      console.error(`Error fetching category ${slug}:`, error);
+      return undefined;
+    }
   }
 
   async createCategory(category: InsertCategory): Promise<Category> {
@@ -35,51 +45,45 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getProducts(params?: { categorySlug?: string; featured?: boolean; search?: string }): Promise<Product[]> {
-    let query = db.select().from(products);
-    
-    // Join would be better but keeping it simple for now or adding relations later
-    // For now, filtering in memory if we need category slug -> id mapping, 
-    // BUT efficient way is to fetch category first if slug provided.
-    
-    if (params?.categorySlug) {
-       const category = await this.getCategoryBySlug(params.categorySlug);
-       if (category) {
-         query = db.select().from(products).where(eq(products.categoryId, category.id)) as any;
-       } else {
-         return [];
-       }
-    }
+    try {
+      const conditions = [];
+      
+      if (params?.categorySlug) {
+        const category = await this.getCategoryBySlug(params.categorySlug);
+        if (category) {
+          conditions.push(eq(products.categoryId, category.id));
+        } else {
+          return [];
+        }
+      }
 
-    if (params?.featured) {
-       // Note: This logic overwrites previous where if strictly chained without 'and'. 
-       // Drizzle query builder is immutable-ish, better to use array of conditions
-       // But for simple implementation:
-       const conditions = [];
-       if (params.categorySlug) {
-         const category = await this.getCategoryBySlug(params.categorySlug);
-         if (category) conditions.push(eq(products.categoryId, category.id));
-         else return [];
-       }
-       if (params.featured) conditions.push(eq(products.isFeatured, true));
-       
-       if (params.search) {
-         conditions.push(ilike(products.name, `%${params.search}%`));
-       }
+      if (params?.featured) {
+        conditions.push(eq(products.isFeatured, true));
+      }
 
-       if (conditions.length > 0) {
-         // This is a simplified way to apply all AND conditions
-         // Correct drizzle usage involves `and(...)`
-         const { and } = await import("drizzle-orm");
-         return await db.select().from(products).where(and(...conditions));
-       }
+      if (params?.search) {
+        conditions.push(ilike(products.name, `%${params.search}%`));
+      }
+
+      let query = db.select().from(products);
+      if (conditions.length > 0) {
+        return await query.where(and(...conditions));
+      }
+      return await query;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return [];
     }
-    
-    return await db.select().from(products);
   }
 
   async getProductBySlug(slug: string): Promise<Product | undefined> {
-    const [product] = await db.select().from(products).where(eq(products.slug, slug));
-    return product;
+    try {
+      const [product] = await db.select().from(products).where(eq(products.slug, slug));
+      return product;
+    } catch (error) {
+      console.error(`Error fetching product ${slug}:`, error);
+      return undefined;
+    }
   }
 
   async createProduct(product: InsertProduct): Promise<Product> {

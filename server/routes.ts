@@ -10,112 +10,141 @@ export async function registerRoutes(
 ): Promise<Server> {
 
   app.get(api.categories.list.path, async (_req, res) => {
-    const categories = await storage.getCategories();
-    res.json(categories);
+    try {
+      const categories = await storage.getCategories();
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   });
 
   app.get(api.categories.get.path, async (req, res) => {
-    const category = await storage.getCategoryBySlug(req.params.slug);
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
+    try {
+      const category = await storage.getCategoryBySlug(req.params.slug);
+      if (!category) {
+        return res.status(404).json({ message: 'Category not found' });
+      }
+      res.json(category);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
     }
-    res.json(category);
   });
 
   app.get(api.products.list.path, async (req, res) => {
-    // Manual parsing of query params since express query is string
-    const featured = req.query.featured === 'true';
-    const category = req.query.category as string | undefined;
-    const search = req.query.search as string | undefined;
-    
-    const products = await storage.getProducts({ featured, categorySlug: category, search });
-    res.json(products);
+    try {
+      const featured = req.query.featured === 'true';
+      const category = req.query.category as string | undefined;
+      const search = req.query.search as string | undefined;
+      
+      const products = await storage.getProducts({ featured, categorySlug: category, search });
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   });
 
   app.get(api.products.get.path, async (req, res) => {
-    const product = await storage.getProductBySlug(req.params.slug);
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+    try {
+      const product = await storage.getProductBySlug(req.params.slug);
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
     }
-    res.json(product);
   });
 
-  // Seed Data Endpoint (Internal use or auto-run)
   await seedDatabase();
 
   return httpServer;
 }
 
 async function seedDatabase() {
-  const categories = await storage.getCategories();
-  if (categories.length === 0) {
-    const men = await storage.createCategory({
-      name: "Men's Collection",
-      slug: "men",
-      imageUrl: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=2071&auto=format&fit=crop",
-      description: "Timeless essentials for the modern man."
+  const categoriesList = await storage.getCategories();
+  if (categoriesList.length === 0) {
+    const watches = await storage.createCategory({
+      name: "Luxury Watches",
+      slug: "watches",
+      imageUrl: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=2080&auto=format&fit=crop",
+      description: "Exquisite timepieces for the discerning individual."
     });
     
-    const women = await storage.createCategory({
-      name: "Women's Collection",
-      slug: "women",
-      imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop",
-      description: "Elegant designs for every occasion."
+    const clothes = await storage.createCategory({
+      name: "Premium Clothing",
+      slug: "clothes",
+      imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop",
+      description: "Luxurious fabrics and impeccable tailoring."
     });
 
-    const accessories = await storage.createCategory({
-      name: "Accessories",
-      slug: "accessories",
-      imageUrl: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=2070&auto=format&fit=crop",
-      description: "The finishing touches."
+    const shoes = await storage.createCategory({
+      name: "Designer Shoes",
+      slug: "shoes",
+      imageUrl: "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop",
+      description: "Step into sophistication with our exclusive footwear."
     });
 
+    const goggles = await storage.createCategory({
+      name: "Eyewear",
+      slug: "goggles",
+      imageUrl: "https://images.unsplash.com/photo-1511499767390-90342f5b89a8?q=80&w=2080&auto=format&fit=crop",
+      description: "Iconic eyewear designed for style and clarity."
+    });
+
+    const socks = await storage.createCategory({
+      name: "Socks & Intimates",
+      slug: "socks",
+      imageUrl: "https://images.unsplash.com/photo-1582966239102-93cc74a44cb5?q=80&w=1974&auto=format&fit=crop",
+      description: "Premium comfort in every step."
+    });
+
+    // Seed Products
     await storage.createProduct({
-      categoryId: men.id,
-      name: "The Classic Oxford",
-      slug: "classic-oxford-shirt",
-      description: "A staple in every wardrobe. Crafted from premium Italian cotton with a perfect tailored fit.",
-      price: "120.00",
-      images: ["https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=1976&auto=format&fit=crop"],
+      categoryId: watches.id,
+      name: "Rin Chronograph Obsidian",
+      slug: "rin-chronograph-obsidian",
+      description: "A masterpiece of engineering featuring an obsidian dial and sapphire crystal.",
+      price: "1250.00",
+      images: ["https://images.unsplash.com/photo-1547996160-81dfa63595ee?q=80&w=1974&auto=format&fit=crop"],
       isFeatured: true,
-      specifications: { "Material": "100% Cotton", "Fit": "Tailored", "Care": "Machine Wash" },
-      stock: 50
+      specifications: { "Case": "42mm Titanium", "Movement": "Automatic", "Strap": "Alligator Leather" },
+      stock: 5
     });
 
     await storage.createProduct({
-      categoryId: men.id,
-      name: "Merino Wool Sweater",
-      slug: "merino-wool-sweater",
-      description: "Ultra-soft merino wool sweater perfect for layering.",
-      price: "185.00",
-      images: ["https://images.unsplash.com/photo-1610652492500-ded49ceeb378?q=80&w=1974&auto=format&fit=crop"],
+      categoryId: clothes.id,
+      name: "Cashmere Overcoat Bone",
+      slug: "cashmere-overcoat-bone",
+      description: "Luxurious pure cashmere overcoat in a stunning bone white finish.",
+      price: "890.00",
+      images: ["https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?q=80&w=1974&auto=format&fit=crop"],
+      isFeatured: true,
+      specifications: { "Material": "100% Cashmere", "Origin": "Inner Mongolia", "Fit": "Tailored" },
+      stock: 12
+    });
+
+    await storage.createProduct({
+      categoryId: shoes.id,
+      name: "Ivory Leather Loafers",
+      slug: "ivory-leather-loafers",
+      description: "Hand-burnished ivory leather loafers with a signature brass bit.",
+      price: "340.00",
+      images: ["https://images.unsplash.com/photo-1533867617858-e7b97e060509?q=80&w=2069&auto=format&fit=crop"],
       isFeatured: false,
-      specifications: { "Material": "100% Merino Wool", "Fit": "Regular", "Origin": "Italy" },
-      stock: 30
+      specifications: { "Leather": "Calfskin", "Sole": "Blake Stitched Leather", "Color": "Ivory" },
+      stock: 20
     });
 
     await storage.createProduct({
-      categoryId: women.id,
-      name: "Silk Evening Dress",
-      slug: "silk-evening-dress",
-      description: "Flowing silk silhouette that captures elegance and grace.",
-      price: "450.00",
-      images: ["https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1908&auto=format&fit=crop"],
+      categoryId: goggles.id,
+      name: "Aviation Silver Gradients",
+      slug: "aviation-silver-gradients",
+      description: "Classic aviator silhouette with silver-tone frames and gradient lenses.",
+      price: "280.00",
+      images: ["https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=2080&auto=format&fit=crop"],
       isFeatured: true,
-      specifications: { "Material": "100% Silk", "Fit": "Relaxed", "Care": "Dry Clean Only" },
-      stock: 15
-    });
-
-    await storage.createProduct({
-      categoryId: accessories.id,
-      name: "Minimalist Leather Watch",
-      slug: "leather-watch",
-      description: "A timeless timepiece with a genuine leather strap and minimal dial.",
-      price: "220.00",
-      images: ["https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=1976&auto=format&fit=crop"],
-      isFeatured: true,
-      specifications: { "Movement": "Quartz", "Strap": "Genuine Leather", "Water Resistant": "3ATM" },
-      stock: 100
+      specifications: { "Frame": "Surgical Steel", "Lens": "Polarized Gradient", "UVP": "100% UV400" },
+      stock: 40
     });
   }
 }

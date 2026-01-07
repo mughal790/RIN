@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, numeric, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, numeric, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -16,23 +16,23 @@ export const products = pgTable("products", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   description: text("description").notNull(),
-  price: numeric("price").notNull(), // Stored as string for precision
-  originalPrice: numeric("original_price"), // For strike-through pricing
+  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  originalPrice: numeric("original_price", { precision: 10, scale: 2 }),
   images: text("images").array().notNull(),
   isFeatured: boolean("is_featured").default(false),
   specifications: jsonb("specifications").$type<Record<string, string>>(),
   stock: integer("stock").default(0),
+  rating: numeric("rating", { precision: 2, scale: 1 }).default("0.0"),
+  reviewCount: integer("review_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Schemas
 export const insertCategorySchema = createInsertSchema(categories).omit({ id: true });
-export const insertProductSchema = createInsertSchema(products).omit({ id: true });
+export const insertProductSchema = createInsertSchema(products).omit({ id: true, createdAt: true });
 
-// Types
 export type Category = typeof categories.$inferSelect;
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type Product = typeof products.$inferSelect;
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 
-// API Types
 export type ProductWithCategory = Product & { category: Category };
