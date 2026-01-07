@@ -107,7 +107,7 @@ async function seedDatabase() {
       slug: "rin-chronograph-obsidian",
       description: "A masterpiece of engineering featuring an obsidian dial and sapphire crystal.",
       price: "1250.00",
-      images: ["/1.jpg"],
+      images: ["/public/1.jpg"],
       isFeatured: true,
       specifications: { "Case": "42mm Titanium", "Movement": "Automatic", "Strap": "Alligator Leather" },
       stock: 5
