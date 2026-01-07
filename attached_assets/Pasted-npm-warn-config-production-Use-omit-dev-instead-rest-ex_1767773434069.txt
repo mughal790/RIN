@@ -1,0 +1,99 @@
+npm warn config production Use `--omit=dev` instead.
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.cjs
+/app/dist/index.cjs:39385
+  throw new Error(
+  ^
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+    at Object.<anonymous> (/app/dist/index.cjs:39385:9)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+npm warn config production Use `--omit=dev` instead.
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.cjs
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+Node.js v22.21.1
+/app/dist/index.cjs:39385
+  throw new Error(
+  ^
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+    at Object.<anonymous> (/app/dist/index.cjs:39385:9)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+npm warn config production Use `--omit=dev` instead.
+Node.js v22.21.1
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+> rest-express@1.0.0 start
+  ^
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+> NODE_ENV=production node dist/index.cjs
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at Object.<anonymous> (/app/dist/index.cjs:39385:9)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at node:internal/main/run_main_module:36:49
+/app/dist/index.cjs:39385
+  throw new Error(
+npm warn config production Use `--omit=dev` instead.
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.cjs
+    at node:internal/main/run_main_module:36:49
+Node.js v22.21.1
+/app/dist/index.cjs:39385
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+  throw new Error(
+  ^
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at Object.<anonymous> (/app/dist/index.cjs:39385:9)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+Node.js v22.21.1
+  throw new Error(
+  ^
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+    at Object.<anonymous> (/app/dist/index.cjs:39385:9)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+npm warn config production Use `--omit=dev` instead.
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.cjs
+/app/dist/index.cjs:39385
+npm warn config production Use `--omit=dev` instead.
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.cjs
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+Node.js v22.21.1
+/app/dist/index.cjs:39385
+  throw new Error(
+  ^
+Error: DATABASE_URL must be set. Did you forget to provision a database?
+    at Object.<anonymous> (/app/dist/index.cjs:39385:9)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
